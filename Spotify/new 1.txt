@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Image Cropping</title>
+    <style>
+        .image-container {
+            width: 458px; /* Width of the container */
+            height: 140px; /* Height of the container */
+            overflow: hidden; /* Hide parts of the image that don't fit */
+            border-radius: 15px; /* Rounded corners */
+            position: relative; /* Relative positioning for the child element */
+        }
+
+        .image {
+            object-fit: cover; /* Cover the entire container */
+            object-position: center; /* Center the image */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+        }
+    </style>
+</head>
+<body>
+    <div class='image-container'>
+        <img src='"&x&"' alt='Album Cover' class='image'>
+    </div>
+</body>
+</html>
+
+
+Date = 
+--  
+--     Configuration
+--  
+VAR __FirstDayOfWeek = 0
+----------------------------------------
+VAR __WeekDayCalculationType = IF ( __FirstDayOfWeek = 0, 7, __FirstDayOfWeek ) + 10
+VAR __Calendar = 
+    VAR __FirstYear = YEAR ( MINX ( { MIN ( 'updated-spotify-2023'[Date] ) }, ''[Value] ) )
+    VAR __LastYear =  YEAR ( MAXX ( { MAX ( 'updated-spotify-2023'[Date] ) }, ''[Value] ) )
+    RETURN CALENDAR (
+        DATE ( __FirstYear, 1, 1 ),
+        DATE ( __LastYear, 12, 31 )
+    )
+VAR __Step3 = 
+    GENERATE (
+        __Calendar,
+        VAR __IsStandardLocale = IF ( FORMAT( DATE( 2000, 1, 1 ), "oooo" ) = "oooo", TRUE, FALSE )
+        VAR __MonthFormatString = IF( __IsStandardLocale, "mmm", "ooo" )
+        VAR __DayFormatString = IF( __IsStandardLocale, "ddd", "aaa" )
+        VAR __LastTransactionDate = MAXX ( { MAX ( 'updated-spotify-2023'[Date] ) }, ''[Value] )
+        VAR __Date = [Date]
+        VAR __WeekDay = FORMAT ( __Date, __DayFormatString )
+        RETURN ROW ( 
+            "Year", __YearNumber,
+            "Year Quarter", FORMAT ( __QuarterNumber, "\Q0" ) & "-" & FORMAT ( __YearNumber, "0000" ),
+            "Quarter", FORMAT( __QuarterNumber, "\Q0" ),
+            "Year Month", FORMAT ( __Date, __MonthFormatString & " yyyy" ),
+            "Month", FORMAT ( __Date, __MonthFormatString ),
+            "Day of Week", __WeekDay,
+        )
+    )
+RETURN
+    __Step3

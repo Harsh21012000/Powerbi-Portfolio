@@ -1,2 +1,3 @@
 # Powerbi-Portfolio
-This is Power Bu dashboard
+This is Power Bi dashboard
+Author- Harsh Patel

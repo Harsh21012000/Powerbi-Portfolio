@@ -1,4 +1,4 @@
 # Powerbi-Portfolio
-This is Power Bi dashboard Project.
+This is the Power BI dashboard Project.
 <br>
 Author- Harsh Patel
